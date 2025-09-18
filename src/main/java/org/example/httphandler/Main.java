@@ -5,8 +5,16 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
         printUsers();
+        System.out.println("///////////////////////////////////");
         printPosts();
+        System.out.println("///////////////////////////////////");
+        printTodos();
 
+    }
+
+    private static void printTodos() throws IOException, InterruptedException {
+        TodosController controller = new TodosController();
+        controller.getOpenedTodos(4L);
     }
 
     private static void printPosts() throws IOException, InterruptedException {
