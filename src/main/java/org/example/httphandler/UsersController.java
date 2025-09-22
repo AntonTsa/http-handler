@@ -14,6 +14,8 @@ public class UsersController {
     private static final String FILE_PATH = DIR_PATH + DIR_NAME + DELIMITER;
     private static final String USERS_URL = "https://jsonplaceholder.typicode.com/users";
     private static final String USER_URL = USERS_URL + DELIMITER;
+    private static final String CODE = "Code: ";
+    private static final String BODY = "Body: ";
     private final HttpClient httpClient = HttpClient.newHttpClient();
 
     public void addNewUser() throws IOException, InterruptedException {
@@ -26,7 +28,7 @@ public class UsersController {
         HttpResponse<String> response =
                 httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        System.out.println("Code: " + response.statusCode());
+        System.out.println(CODE + response.statusCode());
         System.out.println("Location Header: ");
         response.headers().firstValue("Location").ifPresent(System.out::println);
     }
@@ -41,8 +43,8 @@ public class UsersController {
         HttpResponse<String> response =
                 httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        System.out.println("Code: " + response.statusCode());
-        System.out.println("Body: ");
+        System.out.println(CODE + response.statusCode());
+        System.out.println(BODY);
         System.out.println(response.body());
         System.out.println();
     }
@@ -56,7 +58,7 @@ public class UsersController {
         HttpResponse<String> response =
                 httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        System.out.println("Code: " + response.statusCode());
+        System.out.println(CODE + response.statusCode());
     }
 
     public void getUsers() throws IOException, InterruptedException {
@@ -68,8 +70,8 @@ public class UsersController {
         HttpResponse<String> response =
                 httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        System.out.println("Code: " + response.statusCode());
-        System.out.println("Body: ");
+        System.out.println(CODE + response.statusCode());
+        System.out.println(BODY);
         System.out.println(response.body());
         System.out.println();
     }
@@ -83,8 +85,8 @@ public class UsersController {
         HttpResponse<String> response =
                 httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        System.out.println("Code: " + response.statusCode());
-        System.out.println("Body: ");
+        System.out.println(CODE + response.statusCode());
+        System.out.println(BODY);
         System.out.println(response.body());
         System.out.println();
     }
@@ -98,8 +100,8 @@ public class UsersController {
         HttpResponse<String> response =
                 httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        System.out.println("Code: " + response.statusCode());
-        System.out.println("Body: ");
+        System.out.println(CODE + response.statusCode());
+        System.out.println(BODY);
         System.out.println(response.body());
         System.out.println();
     }

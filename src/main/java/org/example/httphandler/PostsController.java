@@ -3,7 +3,6 @@ package org.example.httphandler;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -48,10 +47,11 @@ public class PostsController {
     }
 
     private void getComments(long userId, long postId) throws IOException, InterruptedException {
-        String commentsURL =POSTS_URL + DELIMITER + postId + DELIMITER + COMMENTS;
-        String pathToFile = DIR_PATH + POSTS + DELIMITER + "user-" +  userId + "-post-" + postId + "-comments.json";
+        String commentsUrl = POSTS_URL + DELIMITER + postId + DELIMITER + COMMENTS;
+        String pathToFile = DIR_PATH + POSTS + DELIMITER
+                + "user-" + userId + "-post-" + postId + "-comments.json";
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(commentsURL))
+                .uri(URI.create(commentsUrl))
                 .GET()
                 .build();
 

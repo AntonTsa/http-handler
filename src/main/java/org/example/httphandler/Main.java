@@ -3,11 +3,14 @@ package org.example.httphandler;
 import java.io.IOException;
 
 public class Main {
+    private static final String TASKS_DELIMITER = "///////////////////////////////////";
+    private static final String PART_DELIMITER = "-------------------------------";
+
     public static void main(String[] args) throws IOException, InterruptedException {
         printUsers();
-        System.out.println("///////////////////////////////////");
+        System.out.println(TASKS_DELIMITER);
         printPosts();
-        System.out.println("///////////////////////////////////");
+        System.out.println(TASKS_DELIMITER);
         printTodos();
 
     }
@@ -26,15 +29,15 @@ public class Main {
         UsersController usersController = new UsersController();
         System.out.println("Users Controller");
         usersController.addNewUser();
-        System.out.println("-------------");
+        System.out.println(PART_DELIMITER);
         usersController.updateUser(5L);
-        System.out.println("-------------");
+        System.out.println(PART_DELIMITER);
         usersController.deleteUser(5L);
-        System.out.println("-------------");
+        System.out.println(PART_DELIMITER);
         usersController.getUsers();
-        System.out.println("-------------");
+        System.out.println(PART_DELIMITER);
         usersController.getUser(5L);
-        System.out.println("-------------");
+        System.out.println(PART_DELIMITER);
         usersController.getUserByUsername("Elwyn.Skiles");
     }
 }
