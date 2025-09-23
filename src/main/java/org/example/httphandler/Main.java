@@ -1,12 +1,10 @@
 package org.example.httphandler;
 
-import java.io.IOException;
-
 public class Main {
     private static final String TASKS_DELIMITER = "///////////////////////////////////";
     private static final String PART_DELIMITER = "-------------------------------";
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) {
         printUsers();
         System.out.println(TASKS_DELIMITER);
         printPosts();
@@ -15,17 +13,17 @@ public class Main {
 
     }
 
-    private static void printTodos() throws IOException, InterruptedException {
+    private static void printTodos() {
         TodosController controller = new TodosController();
         controller.getOpenedTodos(4L);
     }
 
-    private static void printPosts() throws IOException, InterruptedException {
+    private static void printPosts() {
         PostsController postsController = new PostsController();
         postsController.getCommentsToLastPost(3L);
     }
 
-    private static void printUsers() throws IOException, InterruptedException {
+    private static void printUsers() {
         UsersController usersController = new UsersController();
         System.out.println("Users Controller");
         usersController.addNewUser();

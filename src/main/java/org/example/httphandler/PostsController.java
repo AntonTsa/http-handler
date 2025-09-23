@@ -3,13 +3,8 @@ package org.example.httphandler;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import java.io.IOException;
 import java.net.URI;
-import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class PostsController {
     private static final String DIR_PATH = "./src/main/resources/";
@@ -18,21 +13,21 @@ public class PostsController {
     private static final String USERS_URL = "https://jsonplaceholder.typicode.com/users";
     private static final String POSTS_URL = "https://jsonplaceholder.typicode.com/posts";
     private static final String COMMENTS = "comments";
-    private final HttpClient httpClient = HttpClient.newHttpClient();
+    private final HttpRequestSender sender = new HttpRequestSender();
 
-    public void getCommentsToLastPost(long userId) throws IOException, InterruptedException {
+    public void getCommentsToLastPost(long userId) {
         String pathToPosts = USERS_URL + DELIMITER + userId + DELIMITER + POSTS;
-
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(pathToPosts))
                 .GET()
                 .build();
 
-        HttpResponse<String> response =
-                httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        var response = sender.getResponseToString(request);
 
-        int lastPostId = getMaxPostId(response.body());
-        getComments(userId, lastPostId);
+        if (response.isPresent()) {
+            int lastPostId = getMaxPostId(response.get().body());
+            getComments(userId, lastPostId);
+        }
     }
 
     private int getMaxPostId(String answer) {
@@ -46,7 +41,7 @@ public class PostsController {
                 .orElse(-1);
     }
 
-    private void getComments(long userId, long postId) throws IOException, InterruptedException {
+    private void getComments(long userId, long postId) {
         String commentsUrl = POSTS_URL + DELIMITER + postId + DELIMITER + COMMENTS;
         String pathToFile = DIR_PATH + POSTS + DELIMITER
                 + "user-" + userId + "-post-" + postId + "-comments.json";
@@ -55,10 +50,7 @@ public class PostsController {
                 .GET()
                 .build();
 
-        HttpResponse<Path> response =
-                httpClient.send(request, HttpResponse.BodyHandlers.ofFile(Paths.get(pathToFile)));
-
-        System.out.println(response.body());
+        sender.getResponseToFile(request, pathToFile);
     }
 
 }

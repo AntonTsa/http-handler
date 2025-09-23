@@ -1,10 +1,8 @@
 package org.example.httphandler;
 
-import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.net.URI;
-import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.nio.file.Paths;
 
 public class UsersController {
@@ -16,93 +14,114 @@ public class UsersController {
     private static final String USER_URL = USERS_URL + DELIMITER;
     private static final String CODE = "Code: ";
     private static final String BODY = "Body: ";
-    private final HttpClient httpClient = HttpClient.newHttpClient();
+    private final HttpRequestSender sender = new HttpRequestSender();
 
-    public void addNewUser() throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(USERS_URL))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofFile(Paths.get(FILE_PATH + "create_user.json")))
-                .build();
+    public void addNewUser() {
+        HttpRequest request;
+        try {
+            request = HttpRequest.newBuilder()
+                    .uri(URI.create(USERS_URL))
+                    .header("Content-Type", "application/json")
+                    .POST(
+                            HttpRequest.BodyPublishers
+                                    .ofFile(Paths.get(FILE_PATH + "create_user.json")))
+                    .build();
+        } catch (FileNotFoundException e) {
+            System.err.println(e.getMessage());
+            return;
+        }
 
-        HttpResponse<String> response =
-                httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        var response =
+                sender.getResponseToString(request);
 
-        System.out.println(CODE + response.statusCode());
-        System.out.println("Location Header: ");
-        response.headers().firstValue("Location").ifPresent(System.out::println);
+        if (response.isPresent()) {
+            System.out.println(CODE + response.get().statusCode());
+            System.out.println("Location Header: ");
+            response.get().headers().firstValue("Location").ifPresent(System.out::println);
+        }
     }
 
-    public void updateUser(long id) throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(USER_URL + id))
-                .header("Content-Type", "application/json")
-                .PUT(HttpRequest.BodyPublishers.ofFile(Paths.get(FILE_PATH + "update_user.json")))
-                .build();
+    public void updateUser(long id) {
+        HttpRequest request;
+        try {
+            request = HttpRequest.newBuilder()
+                    .uri(URI.create(USER_URL + id))
+                    .header("Content-Type", "application/json")
+                    .PUT(
+                            HttpRequest.BodyPublishers
+                                    .ofFile(Paths.get(FILE_PATH + "update_user.json")))
+                    .build();
+        } catch (FileNotFoundException e) {
+            System.err.println(e.getMessage());
+            return;
+        }
 
-        HttpResponse<String> response =
-                httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        var response = sender.getResponseToString(request);
 
-        System.out.println(CODE + response.statusCode());
-        System.out.println(BODY);
-        System.out.println(response.body());
-        System.out.println();
+        if (response.isPresent()) {
+            System.out.println(CODE + response.get().statusCode());
+            System.out.println(BODY);
+            System.out.println(response.get().body());
+            System.out.println();
+        }
     }
 
-    public void deleteUser(long id) throws IOException, InterruptedException {
+    public void deleteUser(long id) {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(USER_URL + id))
                 .DELETE()
                 .build();
 
-        HttpResponse<String> response =
-                httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        var response = sender.getResponseToString(request);
 
-        System.out.println(CODE + response.statusCode());
+        response.ifPresent(httpResponse -> System.out.println(CODE + response.get().statusCode()));
     }
 
-    public void getUsers() throws IOException, InterruptedException {
+    public void getUsers() {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(USERS_URL))
                 .GET()
                 .build();
 
-        HttpResponse<String> response =
-                httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        var response = sender.getResponseToString(request);
 
-        System.out.println(CODE + response.statusCode());
-        System.out.println(BODY);
-        System.out.println(response.body());
-        System.out.println();
+        if (response.isPresent()) {
+            System.out.println(CODE + response.get().statusCode());
+            System.out.println(BODY);
+            System.out.println(response.get().body());
+            System.out.println();
+        }
     }
 
-    public void getUser(long id) throws IOException, InterruptedException {
+    public void getUser(long id) {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(USER_URL + id))
                 .GET()
                 .build();
 
-        HttpResponse<String> response =
-                httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        var response = sender.getResponseToString(request);
 
-        System.out.println(CODE + response.statusCode());
-        System.out.println(BODY);
-        System.out.println(response.body());
-        System.out.println();
+        if (response.isPresent()) {
+            System.out.println(CODE + response.get().statusCode());
+            System.out.println(BODY);
+            System.out.println(response.get().body());
+            System.out.println();
+        }
     }
 
-    public void getUserByUsername(String username) throws IOException, InterruptedException {
+    public void getUserByUsername(String username) {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(USERS_URL + "?username=" + username))
                 .GET()
                 .build();
 
-        HttpResponse<String> response =
-                httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        var response = sender.getResponseToString(request);
 
-        System.out.println(CODE + response.statusCode());
-        System.out.println(BODY);
-        System.out.println(response.body());
-        System.out.println();
+        if (response.isPresent()) {
+            System.out.println(CODE + response.get().statusCode());
+            System.out.println(BODY);
+            System.out.println(response.get().body());
+            System.out.println();
+        }
     }
 }
